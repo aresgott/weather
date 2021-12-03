@@ -1,9 +1,11 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpException, HttpStatus, NotFoundException, Param, Post, Query, Res } from '@nestjs/common';
+import { ApiNotFoundResponse, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { response } from 'express';
 import { CitiesService } from './cities.service';
 import { CreateCityDto } from './dto/create-city.dto';
 import { cityObj } from './entities/city.entity';
 
+@ApiTags("City")
 @Controller('cities')
 export class CitiesController {
     constructor(private readonly citiesService: CitiesService) { }
@@ -20,6 +22,7 @@ export class CitiesController {
 
 
     // Should return the last known weather data for the city given by name (not id)
+    @ApiNotFoundResponse({ description: 'Not found city' })
     @Get(':id')
     findOneCityWeather(@Param('id') id: number) {
         const city = this.citiesService.findOne(id);
