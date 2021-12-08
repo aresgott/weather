@@ -11,6 +11,7 @@ async function bootstrap() {
     transform: true
   }));
 
+  //configure for swagger docs
   const option = new DocumentBuilder()
     .setTitle("Weather Api for Coffee-IT")
     .setDescription("check your city weather with these apis")
@@ -19,7 +20,6 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, option);
   SwaggerModule.setup('api',app,document);
-
 
   await app.listen(3000);
 }

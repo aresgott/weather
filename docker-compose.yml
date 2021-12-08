@@ -5,5 +5,21 @@ services:
     restart: always
     ports:
       - 27017:27017
+    networks:
+      - weatherNetwork
     environment:
       MONGODB_DATABASE: weather-it
+
+  weather:
+    image: weather_docker
+    restart: always
+    ports:
+      - 443:443
+    depends_on:
+      - db
+    environment:
+      MONGODB_DATABASE: weather-it
+
+networks:
+  weatherNetworks:
+    driver: bridge

@@ -1,11 +1,15 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
+import { coord } from "src/weather/dto/weather.dto";
 
 @Schema()
 export class CityObj extends Document {
     @Prop()
-    _id:string;
+    coord:coord
     
+    @Prop()
+    cityId:number;
+
     @Prop()
     name:string;
 }
