@@ -1,15 +1,21 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { CronJob } from 'cron';
-import { CitiesService } from 'src/cities/cities.service';
-import { WeatherService } from 'src/weather/weather.service';
+import { CitiesService } from '../cities/cities.service';
+import { WeatherService } from '../weather/weather.service';
 
 @Injectable()
 export class JobrunnerService {
+    private readonly logger = new Logger('Job');
 
-    constructor(private city: CitiesService, private weather: WeatherService, private schedulerRegistry: SchedulerRegistry) {
+    constructor(
+        private city: CitiesService, private weather: WeatherService,
+        private schedulerRegistry: SchedulerRegistry
+    ) {
         const job = new CronJob(`${process.env.JOB_WEATHER_FETCH}`, async () => {
-            console.log(`time  for job  to run!`)
+
+            this.logger.warn('Time for job to run!');
+
             let FailurJob = [];
             // get city
             const listCity = await this.city.getAllCity();
@@ -20,19 +26,15 @@ export class JobrunnerService {
                 const id = iterator._id;
                 try {
                     let tmpResultWeather = await this.weather.getDataWeather(cityName);
-                    // // save weathers
+                    // save weathers
                     await this.weather.addWeatherData(tmpResultWeather, id);
                     let tmpForcastWeather = await this.weather.getDataWeatherForcast(iterator.coord.lat, iterator.coord.lon)
-                    this.weather.addWeatherForcastData(tmpForcastWeather,id)
-                    // console.log(tmpForcastWeather)
+                    this.weather.addWeatherForcastData(tmpForcastWeather, id)
                 } catch (error) {
+                    this.logger.error('Fail one Job: cityName : '+cityName);
                     FailurJob.push(cityName);
                 }
             }
-
-            // console.log(FailurJob)
-
-
 
             //fail jobs
         });

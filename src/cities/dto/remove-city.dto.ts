@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsArray, IsBoolean, IsNumber } from "class-validator";
-import { SingleCityDto } from "./single-city.dto";
+import {  SingleNameCity } from "./single-city.dto";
 
 export class RemoveCityDto {
     @IsBoolean()
@@ -13,5 +13,5 @@ export class RemoveCityDto {
     
     @IsArray()
     @ApiProperty({ description: "city which removed"  })
-    readonly result?: SingleCityDto;
+    readonly result?: SingleNameCity;
 }

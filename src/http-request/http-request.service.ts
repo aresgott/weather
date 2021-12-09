@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
-import { WeatherObj } from 'src/weather/entities/weather.entity';
+import { WeatherObj } from '../weather/entities/weather.entity';
 
 @Injectable()
 export class HttpRequestService {

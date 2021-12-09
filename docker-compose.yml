@@ -4,22 +4,20 @@ services:
     image: mongo
     restart: always
     ports:
-      - 27017:27017
-    networks:
-      - weatherNetwork
-    environment:
-      MONGODB_DATABASE: weather-it
-
+      - "27017:27017"
+    volumes:
+      - weather-db:/data/db:rw
   weather:
-    image: weather_docker
+    image: weather:latest
+    build:
+      context: ./
+      dockerfile: Dockerfile
     restart: always
+    volumes:
+      - ./.env:/app/dist/.env:ro
     ports:
-      - 443:443
+      - "3000:3000"
     depends_on:
       - db
-    environment:
-      MONGODB_DATABASE: weather-it
-
-networks:
-  weatherNetworks:
-    driver: bridge
+volumes:
+  weather-db:

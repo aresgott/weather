@@ -7,7 +7,6 @@ import { HttpModule } from '@nestjs/axios';
 import { ScheduleModule } from '@nestjs/schedule';
 import { CitiesModule } from './cities/cities.module';
 import { WeatherModule } from './weather/weather.module';
-import { SampleService } from './sample/sample.service';
 
 @Module({
   imports: [
@@ -19,6 +18,6 @@ import { SampleService } from './sample/sample.service';
     WeatherModule
   ],
   controllers: [AppController],
-  providers: [AppService, SampleService],
+  providers: [AppService],
 })
 export class AppModule { }

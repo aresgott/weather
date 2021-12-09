@@ -2,8 +2,9 @@ import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { ApiNotFoundResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CitiesService } from './cities.service';
 import { AddedCityDto, CreateCityDto } from './dto/create-city.dto';
-import { ListCityDto } from './dto/list-city.dto';
-import { SingleCityDto } from './dto/single-city.dto';
+import { ListCityDto, ListCityWithoutForcastDto } from './dto/list-city.dto';
+import { RemoveCityDto } from './dto/remove-city.dto';
+import { SingleCityDto, SingleNameCity } from './dto/single-city.dto';
 
 @ApiTags("City")
 @Controller('cities')
@@ -15,7 +16,7 @@ export class CitiesController {
     // Should include the latest weather data for that city (as stored in the database)
     @Get()
     @ApiOperation({ summary: 'this api should use bulk but bulk service for open api is not free!' })
-    async findAllCities(): Promise<ListCityDto> {
+    async findAllCities(): Promise<ListCityWithoutForcastDto> {
         return this.citiesService.getDataFromApi()
     }
 
@@ -28,7 +29,7 @@ export class CitiesController {
     // Should return the last known weather data for the city given by name (not id)
     @ApiNotFoundResponse({ description: 'Not found city' })
     @Get(':id')
-    findOneCityWeather(@Param('id') id: string): Promise<SingleCityDto> {
+    findOneCityWeather(@Param('id') id: string): Promise<SingleNameCity>  {
         return this.citiesService.findOne(id);
     }
 

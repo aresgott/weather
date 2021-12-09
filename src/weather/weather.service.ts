@@ -2,11 +2,10 @@ import { Model } from 'mongoose';
 import { Injectable, InternalServerErrorException, Logger, NotFoundException, RequestTimeoutException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { WeatherObj } from './entities/weather.entity';
-import { weatherDto, weatherResponseDto } from 'src/weather/dto/weather.dto';
-import { HttpRequestService } from 'src/http-request/http-request.service';
+import { weatherDto, weatherResponseDto } from '../weather/dto/weather.dto';
+import { HttpRequestService } from '../http-request/http-request.service';
 import { WeatherForcastDto, WeatherSevenForcastDto } from './dto/forcast.dto';
 import { WeatherForcastObj } from './entities/weather-forcast.entity';
-import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class WeatherService {

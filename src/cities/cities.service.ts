@@ -1,10 +1,9 @@
 import { BadRequestException, HttpException, HttpStatus, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { WeatherObj } from 'src/weather/entities/weather.entity';
-import { WeatherService } from 'src/weather/weather.service';
+import { WeatherService } from '../weather/weather.service';
 import { AddedCityDto } from './dto/create-city.dto';
-import { ListCityDto } from './dto/list-city.dto';
+import { ListCityDto, ListCityWithoutForcastDto } from './dto/list-city.dto';
 import { RemoveCityDto } from './dto/remove-city.dto';
 import { SingleCityDto } from './dto/single-city.dto';
 import { CityObj } from './entities/city.entity';
@@ -67,6 +66,14 @@ export class CitiesService {
                     ]
                 },
 
+            }
+        },
+        {
+            "$lookup": {
+                "from": "weatherforcastobjs",
+                "localField": "_id",
+                "foreignField": "cityIdF",
+                "as": "forcast",
             }
         }
 
@@ -135,7 +142,7 @@ export class CitiesService {
 
         ]
     }
-    async getDataFromApi(): Promise<ListCityDto> {
+    async getDataFromApi(): Promise<ListCityWithoutForcastDto> {
         let cities = await this.cityModel.find({}).exec();
         let weather: any = [];
         //better way is use bulk, open weather has a premium one!
@@ -145,7 +152,7 @@ export class CitiesService {
             let tmpResultWeather = await this.weather.getDataWeather(cityName);
             weather.push({ id: id, name: cityName, weather: tmpResultWeather })
         }
-        let responseData: ListCityDto = {
+        let responseData: ListCityWithoutForcastDto = {
             hasError: false,
             count: cities.length,
             result: weather.map((weatherItem) => ({
@@ -178,7 +185,8 @@ export class CitiesService {
                     main: weathers[0].weather.main,
                     weather: weathers[0].weather.weather,
                     coord: weathers[0].weather.coord
-                }
+                },
+                forcast:listCities[0].forcast
             })),
         }
         return responseData
@@ -203,8 +211,7 @@ export class CitiesService {
     async findOneByName(name: string): Promise<SingleCityDto> {
         const city = await this.cityModel.findOne({ name: name }).exec();
         if (!city) {
-            throw new NotFoundException("City Not Found!");
-            // return null;
+            return null;
         }
         const response: SingleCityDto = {
             id: city.id,
@@ -220,7 +227,7 @@ export class CitiesService {
         if (listCities.length > 0) {
             let forcast: any;
             let coord = listCities[0].weathers[0]?.weather.coord;
-            if (listCities[0].forcast.length == 0) {
+            if (listCities[0]?.forcast.length == 0) {
                 forcast = await this.weather.getDataWeatherForcast(coord.lat, coord.lon);
                 this.weather.addWeatherForcastData(forcast, listCities[0]._id)
             } else {
@@ -320,9 +327,6 @@ export class CitiesService {
                 }
             } else {
                 const resultRemove = await city.remove();
-
-                // const city = await this.cityModel.findOne({ _id: id }).exec();
-                // console.log(resultRemove)
                 if (!resultRemove) {
                     response = {
                         hasError: false,
