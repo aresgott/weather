@@ -7,15 +7,9 @@ export class WeatherObj extends Document {
 
     @Prop()
     cityIdF:string;
-
-    @Prop()
-    name:string;
     
     @Prop()
     cityId:number;
-
-    @Prop()
-    cityName:string;
 
     @Prop()
     coord: coord;

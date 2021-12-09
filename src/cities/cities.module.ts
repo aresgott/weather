@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { HttpRequestService } from 'src/http-request/http-request.service';
 import { JobrunnerService } from 'src/job-runner/job-runner.service';
+import { WeatherForcastObj, WeatherForcastSchema } from 'src/weather/entities/weather-forcast.entity';
 import { WeatherObj, WeatherSchema } from 'src/weather/entities/weather.entity';
 import { WeatherModule } from 'src/weather/weather.module';
 import { WeatherService } from 'src/weather/weather.service';
@@ -20,11 +21,15 @@ import { CityObj, CitySchema } from './entities/city.entity';
             {
                 name: WeatherObj.name,
                 schema: WeatherSchema
+            },
+            {
+                name: WeatherForcastObj.name,
+                schema: WeatherForcastSchema
             }
         ]),
         HttpModule
     ],
     controllers: [CitiesController],
-    providers: [CitiesService, HttpRequestService, JobrunnerService,WeatherService]
+    providers: [CitiesService, HttpRequestService, JobrunnerService, WeatherService]
 })
 export class CitiesModule { }

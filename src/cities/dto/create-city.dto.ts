@@ -19,5 +19,5 @@ export class AddedCityDto {
     message?: Array<string>
 
     @ApiProperty({ description: "Response from weather service" })
-    weatherService?: weatherResponseDto
+    weather?: weatherResponseDto
 }

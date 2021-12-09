@@ -35,7 +35,7 @@ export class CitiesController {
     // Should return the last known weather data for the city given by name (not id)
     @Get(':name/weather')
     cityWeatherByName(@Param('name') name: string) {
-        return this.citiesService.findOneByName(name);
+        return this.citiesService.findOneByNameAndWeather(name);
     }
 
     // Should create a new city and retrieve the current temperature and other basic weather data for that city
