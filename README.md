@@ -47,7 +47,7 @@ PORT = 3000
 
 ## Stay in touch
 
-- Author - [Mohsen Ahmadinia](ce.ahmadinia@gmail.com)
+- Author - [Mohsen Ahmadinia](mailto:ce.ahmadinia@gmail.com)
 
 ## License
 
