@@ -1,6 +1,6 @@
-# 🌦 Weather Coffee IT ☕️
+# 🌦 Weather ☕️
 
-Coffee IT Nest.js Assessment 
+Nest.js 
 
 ## Installation
 
